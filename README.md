@@ -1,6 +1,3 @@
-#Jokes API
-This API is a joke.`
-
 ### Project Description
 This project is a simple REST API which allows a user to view, create, update and delete jokes.
 Each Joke contains the following fields on the database table:
