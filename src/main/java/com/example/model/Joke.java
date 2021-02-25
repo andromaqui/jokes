@@ -1,5 +1,6 @@
 package com.example.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 public class Joke extends BaseEntity {
   @Id
+  @Schema(accessMode = Schema.AccessMode.READ_ONLY)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 

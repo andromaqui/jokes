@@ -4,7 +4,11 @@ import com.example.exception.ResourceNotFoundException;
 import com.example.model.Joke;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.repository.JokeRepository;
 
@@ -35,8 +40,12 @@ public class JokeController {
   }
 
   @GetMapping("/jokes/page")
-  public Page<Joke> getAllJokesPage(Pageable pageable){
-    return this.jokeRepository.findAll(pageable);
+  public ResponseEntity<List<Joke>> getAllJokesPage(@RequestParam(defaultValue = "0") Integer pageNo,
+                                    @RequestParam(defaultValue = "10") Integer pageSize,
+                                    @RequestParam(defaultValue = "id") String sortBy){
+    Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    Page<Joke> pagedResult = jokeRepository.findAll(paging);
+    return new ResponseEntity<List<Joke>>(pagedResult.getContent(), new HttpHeaders(), HttpStatus.OK);
   }
 
   @GetMapping("/jokes/{id}")
